@@ -32,13 +32,9 @@ int main(void)
 	all_init();
 
 	led1.toggle(&led1);
+	__screen_txt(2,"4");
 	while(1)
 	{
-		if(__get_key_up_value())
-		{
-			led0.toggle(&led0);
-		}
-		//led0.toggle(&led0);
-		delay_ms(200);
+
 	}
 }

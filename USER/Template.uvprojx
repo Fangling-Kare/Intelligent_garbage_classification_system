@@ -678,6 +678,16 @@
               <FileType>5</FileType>
               <FilePath>..\MY_CODE\my_key.h</FilePath>
             </File>
+            <File>
+              <FileName>my_screen.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\MY_CODE\my_screen.c</FilePath>
+            </File>
+            <File>
+              <FileName>my_screen.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\MY_CODE\my_screen.h</FilePath>
+            </File>
           </Files>
         </Group>
       </Groups>
