@@ -161,11 +161,11 @@ void __usart3_configuration(uint32_t usart_bound)
 	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOB,ENABLE); 							//使能GPIOB时钟
 	RCC_APB1PeriphClockCmd(RCC_APB1Periph_USART3,ENABLE);							//使能USART3时钟
  
-	//串口2对应引脚复用映射
+	//串口3对应引脚复用映射
 	GPIO_PinAFConfig(GPIOB,GPIO_PinSource10,GPIO_AF_USART2); 						//GPIOB10复用为USART3
 	GPIO_PinAFConfig(GPIOB,GPIO_PinSource11,GPIO_AF_USART2); 						//GPIOB11复用为USART3
 	
-	//USART2端口配置
+	//USART3端口配置
   	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_10 | GPIO_Pin_11; 						//GPIOB10与GPIOB11
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF;									//复用功能
 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;								//速度50MHz

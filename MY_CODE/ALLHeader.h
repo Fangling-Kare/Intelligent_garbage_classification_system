@@ -6,6 +6,7 @@
 #include "stm32f4xx.h"   
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 #include "sys.h"
 /******************************************************************************************
 *                        @正点原子函数
@@ -26,6 +27,9 @@
 #include "my_key.h"
 #include "my_timer.h"
 #include "my_screen.h"
+#include "my_garbage_data.h"
 
 #include "my_data.h"
+
+
 #endif

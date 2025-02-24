@@ -688,6 +688,16 @@
               <FileType>5</FileType>
               <FilePath>..\MY_CODE\my_screen.h</FilePath>
             </File>
+            <File>
+              <FileName>my_garbage_data.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\MY_CODE\my_garbage_data.c</FilePath>
+            </File>
+            <File>
+              <FileName>my_garbage_data.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\MY_CODE\my_garbage_data.h</FilePath>
+            </File>
           </Files>
         </Group>
       </Groups>

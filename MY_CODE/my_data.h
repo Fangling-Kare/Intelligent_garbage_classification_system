@@ -19,6 +19,9 @@ void key_init(void);
 extern usart_data usart2;
 extern usart_data usart3;
 void usart_init(void);
-
+/******************************************************************************************
+*                        @垃圾——数据结构
+******************************************************************************************/  
+extern GarbageStatistics stats;
 #endif /* __MY_LED_H_ */
 
