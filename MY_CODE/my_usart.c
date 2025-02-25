@@ -15,7 +15,27 @@ uint8_t USART2_DMA_TX_Buffer[USART2_DMA_TX_BUFFER_MAX_LENGTH];
 uint8_t USART3_DMA_RX_Buffer[USART3_DMA_RX_BUFFER_MAX_LENGTH];
 uint8_t USART3_DMA_TX_Buffer[USART3_DMA_TX_BUFFER_MAX_LENGTH];
 
+// 定义帧头和帧尾
+#define PACKET_HEADER 0x0B
+#define PACKET_FOOTER 0x0E
 
+#define MAX_PAYLOAD_LEN 64  
+// 假设有效数据最大长度为64字节
+#define MAX_PACKET_SIZE (1 + 1 + MAX_PAYLOAD_LEN + 1 + 1)
+/******************************************************************************************
+*                        @异或计算
+******************************************************************************************/
+uint8_t calculate_xor_checksum(const uint8_t *data, uint8_t length) 
+{
+    uint8_t checksum = 0;  // 初始化异或校验值为 0
+
+    // 遍历指定长度的数据
+    for (uint8_t i = 0; i < length; i++) {
+        checksum ^= data[i];  // 对每个字节进行异或运算
+    }
+
+    return checksum;  // 返回最终的异或校验值
+}
 /******************************************************************************************
 *                        @USART2
 ******************************************************************************************/
@@ -136,6 +156,15 @@ void __usart2_dma_send_data(uint8_t *send_buffer , uint16_t nSendCount)
 	}
 }
 
+void __usart2_dma_send_byte(uint8_t byte)
+{
+    uint8_t send_buffer[1];  // 创建一个临时缓冲区来存储单个字节
+    send_buffer[0] = byte;   // 将字节存储到缓冲区中
+
+    // 调用现有的 DMA 发送函数发送单个字节
+    __usart2_dma_send_data(send_buffer, 1);
+}
+
 void __usart2_dma_send_string(char *data_to_send)
 {
 	if (data_to_send == NULL) {
@@ -148,6 +177,23 @@ void __usart2_dma_send_string(char *data_to_send)
 }
 
 
+
+void __usart2_dma_send_packet(uint8_t *data_to_send, uint8_t data_length) 
+{
+    if (data_length > MAX_PAYLOAD_LEN) return;
+
+    const uint16_t packet_size = 1 + 1 + data_length + 1 + 1;
+    uint8_t packet_buffer[MAX_PACKET_SIZE];
+    uint8_t *ptr = packet_buffer;
+    *ptr++ = PACKET_HEADER;
+    *ptr++ = data_length;
+    memcpy(ptr, data_to_send, data_length);
+    ptr += data_length;
+    *ptr++ = calculate_xor_checksum(&packet_buffer[1], data_length + 1);
+    *ptr++ = PACKET_FOOTER;
+
+    __usart2_dma_send_data(packet_buffer, packet_size);
+}
 /******************************************************************************************
 *                        @USART3
 ******************************************************************************************/

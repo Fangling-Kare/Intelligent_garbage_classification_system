@@ -31,7 +31,11 @@ int main(void)
 	all_init();
 
 	led1.toggle(&led1);
-	__screen_txt(2,4);
+	uint8_t test_data[] = {0x01, 0x02, 0x03};  // 示例数据
+   uint8_t data_length = sizeof(test_data);          // 数据长度
+
+    // 发送数据包
+    __usart2_dma_send_packet(test_data, data_length);
 	while(1)
 	{
 
