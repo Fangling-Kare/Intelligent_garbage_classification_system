@@ -34,7 +34,7 @@ uint8_t valid_data[255];  	//有效数据数组
 *                        @控制位
 ******************************************************************************************/
 #define CHECK_DATA_STATE 	0 	//接收数据包：该位为0不要校验位，为1要校验位
-#define USART_RX_MODE_StATE	0	//USART接收模式
+#define USART_RX_MODE_STATE	0	//USART接收模式
 
 /******************************************************************************************
 *                        @异或计算
@@ -364,15 +364,14 @@ void usart_register_functions(usart_data* usart)
 ******************************************************************************************/
 void USART2_IRQHandler(void)//串口2中断服务程序
 {
-/*
-#if USART_RX_MODE_STATE == 1
+#if USART_RX_MODE_STATE == 0
 	if(USART_GetITStatus(USART2, USART_IT_RXNE) == SET)
   	{
     USART_SendData(USART2,USART_ReceiveData(USART2));
     USART_ClearITPendingBit(USART2, USART_IT_RXNE);  
   	}  
-#elif USART_RX_MODE_STATE == 0
-*/
+#elif USART_RX_MODE_STATE == 1
+
 	if(USART_GetITStatus(USART2, USART_IT_RXNE) == SET)
   	{
 		static uint8_t recv_state=0;
@@ -411,7 +410,7 @@ void USART2_IRQHandler(void)//串口2中断服务程序
 		}
 	USART_ClearITPendingBit(USART2, USART_IT_RXNE);  
 	}  
-//#endif
+#endif
 } 
 
 

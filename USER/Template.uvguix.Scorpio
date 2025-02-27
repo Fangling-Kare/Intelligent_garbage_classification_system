@@ -1869,9 +1869,9 @@
       </Doc>
       <Doc>
         <Name>..\MY_CODE\my_usart.c</Name>
-        <ColumnNumber>38</ColumnNumber>
-        <TopLine>386</TopLine>
-        <CurrentLine>401</CurrentLine>
+        <ColumnNumber>29</ColumnNumber>
+        <TopLine>13</TopLine>
+        <CurrentLine>37</CurrentLine>
         <Folding>1</Folding>
         <ContractedFolders></ContractedFolders>
         <PaneID>0</PaneID>
