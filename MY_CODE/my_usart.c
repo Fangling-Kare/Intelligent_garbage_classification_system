@@ -15,6 +15,13 @@ uint8_t USART2_DMA_TX_Buffer[USART2_DMA_TX_BUFFER_MAX_LENGTH];
 uint8_t USART3_DMA_RX_Buffer[USART3_DMA_RX_BUFFER_MAX_LENGTH];
 uint8_t USART3_DMA_TX_Buffer[USART3_DMA_TX_BUFFER_MAX_LENGTH];
 
+
+uint8_t rxd_buf[255];			//接收固定包长数
+uint8_t rxd_flag =0;			//接收完成标志
+uint8_t rxd_index=0;				//字节索引
+uint8_t valid_data[255];  	//有效数据数组
+
+
 // 定义帧头和帧尾
 #define PACKET_HEADER 0x0B
 #define PACKET_FOOTER 0x0E
@@ -22,6 +29,13 @@ uint8_t USART3_DMA_TX_Buffer[USART3_DMA_TX_BUFFER_MAX_LENGTH];
 #define MAX_PAYLOAD_LEN 64  
 // 假设有效数据最大长度为64字节
 #define MAX_PACKET_SIZE (1 + 1 + MAX_PAYLOAD_LEN + 1 + 1)
+
+/******************************************************************************************
+*                        @控制位
+******************************************************************************************/
+#define CHECK_DATA_STATE 	0 	//接收数据包：该位为0不要校验位，为1要校验位
+#define USART_RX_MODE_StATE	0	//USART接收模式
+
 /******************************************************************************************
 *                        @异或计算
 ******************************************************************************************/
@@ -350,12 +364,57 @@ void usart_register_functions(usart_data* usart)
 ******************************************************************************************/
 void USART2_IRQHandler(void)//串口2中断服务程序
 {
+/*
+#if USART_RX_MODE_STATE == 1
 	if(USART_GetITStatus(USART2, USART_IT_RXNE) == SET)
   	{
     USART_SendData(USART2,USART_ReceiveData(USART2));
     USART_ClearITPendingBit(USART2, USART_IT_RXNE);  
   	}  
+#elif USART_RX_MODE_STATE == 0
+*/
+	if(USART_GetITStatus(USART2, USART_IT_RXNE) == SET)
+  	{
+		static uint8_t recv_state=0;
+		uint16_t  recv_dat=USART_ReceiveData(USART2);
+    	switch(recv_state){
+		case 0:
+			if(recv_dat==0x0B){
+				recv_state = 1;
+				rxd_index = 0;
+			}
+			else{
+				recv_state = 0;
+			}
+			break;
+		case 1:
+			rxd_buf[rxd_index]=recv_dat;
+			rxd_index++;
+			if(rxd_index >= 5){ 
+				recv_state =2;
+			}
+			break;		
+		case 2:
+			if(recv_dat==0x0E){
+				rxd_flag =1 ;
+				recv_state =0;
+				uint8_t frame_len = rxd_buf[0]; // 帧长
+				for (uint8_t i = 0; i < (frame_len+CHECK_DATA_STATE); i++){
+                    valid_data[i] = rxd_buf[i + 1];
+                }
+				led1.toggle(&led1);
+			}
+			else {
+            recv_state = 0; // 如果不是帧尾，重置状态机
+			}
+			break;
+		}
+	USART_ClearITPendingBit(USART2, USART_IT_RXNE);  
+	}  
+//#endif
 } 
+
+
 void DMA1_Stream6_IRQHandler(void) 
 {
     if (DMA_GetFlagStatus(DMA1_Stream6, DMA_FLAG_TCIF6)) 

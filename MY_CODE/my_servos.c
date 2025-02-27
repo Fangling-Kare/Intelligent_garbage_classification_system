@@ -35,6 +35,9 @@ void pwm_servo_duty_compare(PWM_servo_object_TypeDef *self)
         }
     }
     self->duty_raw = self->current_duty + self->offset; // 动作要加上舵机偏差
+    
+
+    TIM_SetCompare1(TIM8,self->duty_raw);	// 关键输出函数
 }
 void pwm_servo_set_position (PWM_servo_object_TypeDef *self, uint32_t duty, uint32_t duration)
 {

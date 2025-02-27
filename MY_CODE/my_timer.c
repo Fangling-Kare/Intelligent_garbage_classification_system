@@ -8,7 +8,45 @@
 /******************************************************************************************
 *                        @TIM2 —— 直流电机
 ******************************************************************************************/
+/*
+void __tim8_configuration(uint16_t arr,uint16_t psc)
+{		 					 
+	GPIO_InitTypeDef            GPIO_InitStructure      = {0};
+	TIM_TimeBaseInitTypeDef     TIM_TimeBaseStructure   = {0};
+	TIM_OCInitTypeDef           TIM_OCInitStructure     = {0};
+	
+	RCC_APB2PeriphClockCmd(RCC_APB2Periph_TIM2,ENABLE);  	//TIM8时钟使能    
+	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOC, ENABLE); 	//使能GPIOC时钟	
+	
+	GPIO_PinAFConfig(GPIOF,GPIO_PinSource6,GPIO_AF_TIM8);   //GPIOC6复用为定时器8
+	
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_6;               //GPIOC6
+	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF;            //复用功能
+	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;	    //速度100MHz
+	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;          //推挽复用输出
+	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;            //上拉
+	GPIO_Init(GPIOC,&GPIO_InitStructure);                   //初始化PC9
+	  
+	TIM_TimeBaseStructure.TIM_Prescaler=psc;                    //定时器分频
+	TIM_TimeBaseStructure.TIM_CounterMode=TIM_CounterMode_Up;   //向上计数模式
+	TIM_TimeBaseStructure.TIM_Period=arr;                       //自动重装载值
+	TIM_TimeBaseStructure.TIM_ClockDivision=TIM_CKD_DIV1; 
+	
+	TIM_TimeBaseInit(TIM2,&TIM_TimeBaseStructure);             //初始化定时器8
+	
+	//初始化TIM2 Channel1 PWM模式	 
+	TIM_OCInitStructure.TIM_OCMode = TIM_OCMode_PWM1;             //选择定时器模式:TIM脉冲宽度调制模式1
+ 	TIM_OCInitStructure.TIM_OutputState = TIM_OutputState_Enable; //比较输出使能
+	TIM_OCInitStructure.TIM_OCPolarity = TIM_OCPolarity_Low;      //输出极性:TIM输出比较极性低
+	TIM_OC1Init(TIM2, &TIM_OCInitStructure);                      //根据T指定的参数初始化外设TIM2OC1
 
+	TIM_OC1PreloadConfig(TIM2, TIM_OCPreload_Enable);             //使能TIM2在CCR1上的预装载寄存器
+ 
+    TIM_ARRPreloadConfig(TIM2,ENABLE); //使能TIM2 
+	
+	TIM_Cmd(TIM2, ENABLE);            //使能TIM2					  
+}  
+*/
 
 /******************************************************************************************
 *                        @TIM3 —— 步进电机
@@ -69,7 +107,7 @@ void __tim8_configuration(uint16_t arr,uint16_t psc)
 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;	    //速度100MHz
 	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;          //推挽复用输出
 	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;            //上拉
-	GPIO_Init(GPIOC,&GPIO_InitStructure);                   //初始化PC9
+	GPIO_Init(GPIOC,&GPIO_InitStructure);                   //初始化PC6
 	  
 	TIM_TimeBaseStructure.TIM_Prescaler=psc;                    //定时器分频
 	TIM_TimeBaseStructure.TIM_CounterMode=TIM_CounterMode_Up;   //向上计数模式
