@@ -15,15 +15,16 @@ void all_init(void)
 	usart_init();
 	//key_init();
 
-	__tim4_configuration(5000-1,8400-1);
-	__tim8_configuration(500-1,84-1);
+	//__tim4_configuration(5000-1,8400-1);// 时间片
+	__tim2_configuration(1000, 84);
+	__tim4_configuration(1000, 84);
 
 	led0.toggle(&led0);
 	led1.toggle(&led1);
 
 	garbage_statistics_init(&stats);
 
-	servo_init();
+	//servo_init();
 
 }
 
@@ -34,15 +35,27 @@ int main(void)
 
 	led1.toggle(&led1);
 
-	pwm_servo_set_offset(&my_servos_dowm,30);
-	pwm_servo_set_position(&my_servos_dowm, 1500, 800);
+	//pwm_servo_set_offset(&my_servos_dowm,30);
+	//pwm_servo_set_position(&my_servos_dowm, 1500, 800);
+
+    // 设置占空比为 50%
+	TIM_SetCompare1(TIM2, 500);
+	TIM_SetCompare2(TIM2, 500);
+	TIM_SetCompare4(TIM2, 500);
+	
+    TIM_SetCompare1(TIM4, 500);
 	while(1)
 	{
+		// pwm_servo_duty_compare(&my_servos_dowm);
+		// delay_ms(20);
+		
+    // 设置占空比为 50%
+    TIM_SetCompare1(TIM4, 500);
+
+
 		if (rxd_flag ==1){		
 			rxd_flag=0;
 			__usart2_send_array(valid_data,4);
 		}
-		//pwm_servo_duty_compare(&my_servos_dowm);
-		//delay_ms(20);
 	}
 }
