@@ -1,4 +1,4 @@
-修改时间：2025_
+修改时间：20250303_0014
 
 修改人：yypskaren
 
@@ -6,9 +6,9 @@
 
 | 驱动的物品 |名字      | MCU用到的外设 | GPIO |
 | ------    | ----     | ---- | ---- |
-| 直流电机   || TIM2CH1 | PA5   |
-|           || TIM2CH2 | PA1   |
-|           || TIM2CH4 | PA3   |
+| 直流电机   |          | TIM2CH1 | PA5   |
+|           |           | TIM2CH2 | PA1   |
+|           |           | TIM2CH4 | PA3   |
 | 舵机      | 圆盘舵机下| TIM4CH1 | PB6   |
 |           |圆盘舵机上 | TIM4CH2 | PB7   |
 | USART通信 |          | USART2_TX|  PA2 |
@@ -21,7 +21,8 @@
 
 - APB1:84MHz
     - TIM2:
-    - TIM4:50Hz
+    - TIM4:50Hz 0.02s
+    - TIM13:1000Hz 1000us
 
 
 ## HAL库
@@ -48,6 +49,16 @@
     - 修改CCR值，也可以TIMx->CCR1 = 150;
 </details>
 
+
+<details>
+<summary style="font-size: 17px;">GPIO</summary>
+
+1. HAL_GPIO_WritePin(GPIOF,GPIO_PIN_10,GPIO_PIN_RESET);
+   - 拉低
+2. HAL_GPIO_WritePin (GPIOF,GPIO_PIN_9,GPIO_PIN_SET);
+    - 拉高
+</details>
+
 ## 功能
 ### USART
 1. DMA发送:
@@ -64,7 +75,7 @@
 
 - 占空比：duty circle = TIMx->CCR1 / arr(单位：%)
 
-- APB1：TIM2、TIM4，84MHz
+- APB1：TIM2、TIM4、TIM13，84MHz
 
 ### 舵机-Servo
 - TIM4:84-1分频，ARR:20000-1,50Hz
@@ -77,9 +88,23 @@
     |-45    | 1.333 | 1333 |
     |0      | 1.5   | 1500 |
     |45     | 1.666 | 1666 |
-    |90     | 2000  | 2000 |
-    |135    | 2500  | 2500 |
+    |90     | 2     | 2000 |
+    |135    | 2.5   | 2500 |
 
+1100 0 置物盘处于水平位置
+
+1900 90 置物盘处于垂直位置
+
+700 右下角
+
+1300 右上角
+
+### 超声波-HC_SR04
+#### 发送-Trig
+1. TIM13-1000Hz-100us
+2. 发送一个10us的高电平-ccr：100
+3. 至少等待
+#### 接收-Echo
 
 ### 电机-Motor
 

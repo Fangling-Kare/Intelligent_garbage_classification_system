@@ -5,6 +5,8 @@
 
 uint8_t calculate_xor_checksum(const uint8_t *data, uint8_t length);
 
+void usart_init(void);
+
 HAL_StatusTypeDef USART_DMA_SendPacket(UART_HandleTypeDef *huart, uint8_t *data, uint8_t length);
 
 void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart);

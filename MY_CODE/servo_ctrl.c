@@ -1,4 +1,5 @@
 #include "tim.h"
+#include "servo_ctrl.h"
 
 /**
   * @brief  初始化舵机的定时器

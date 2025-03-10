@@ -69,6 +69,28 @@ int main(void)
 
   /* USER CODE BEGIN 1 */
 
+
+
+  // 初始化舵机控制器
+  // ServoControl servo_down = {
+  //   .htim = &htim4,            // 绑定TIM4
+  //   .Channel = TIM_CHANNEL_1,  // 使用通道1
+  //   .current_angle = 0.0f,
+  //   .target_angle = 0.0f,
+  //   .step_speed = 1.0f,        // 默认速度：1度/更新周期
+  //   .is_moving = 0
+  // };
+
+  // ServoControl servo_up = {
+  //   .htim = &htim4,            // 绑定TIM4
+  //   .Channel = TIM_CHANNEL_2,  // 使用通道2
+  //   .current_angle = 0.0f,
+  //   .target_angle = 0.0f,
+  //   .step_speed = 1.0f,        // 默认速度：1度/更新周期
+  //   .is_moving = 0
+  // };
+
+
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -97,11 +119,37 @@ int main(void)
   MX_TIM2_Init();
   MX_TIM4_Init();
   /* USER CODE BEGIN 2 */
+  usart_init();
+	servo_init();
 	
 	uint8_t pData[] = "Hello";
   uint16_t Num = sizeof(pData) - 1;
 	
-  HAL_UART_Transmit_DMA(&huart1, pData, Num);
+  HAL_UART_Transmit_DMA(&huart2, pData, Num);
+
+
+  uint8_t payload[] = {0x01, 0x02, 0x03};
+  HAL_StatusTypeDef status = USART_DMA_SendPacket(&huart2, payload, sizeof(payload));
+
+  //set_servo_angle(&htim4,TIM_CHANNEL_1,45);
+
+
+  ServoControl servo_down = {
+    .htim = &htim4,            // 绑定TIM4
+    .Channel = TIM_CHANNEL_1,  // 使用通道1
+    .current_angle = 0.0f,
+    .target_angle = 0.0f,
+    .step_speed = 1.0f,        // 默认速度：1度/更新周期
+    .is_moving = 0
+  };
+
+  set_servo_target_angle(&servo_down, 45.0f, 1, 30.0f);
+  //update_servo_motion(&servo_down);
+
+
+  
+
+
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -109,6 +157,14 @@ int main(void)
   while (1)
   {
     /* USER CODE END WHILE */
+  // __HAL_TIM_SET_COMPARE(&htim4, TIM_CHANNEL_1, 1900);
+  // HAL_Delay(1000);
+  // __HAL_TIM_SET_COMPARE(&htim4, TIM_CHANNEL_2, 1200);
+  // HAL_Delay(1000);
+  update_servo_motion(&servo_down);
+  HAL_Delay(20);
+
+
 
     /* USER CODE BEGIN 3 */
   }
