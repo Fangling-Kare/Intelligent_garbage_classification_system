@@ -3,19 +3,24 @@
 
 #include "ALLHeader.h"
 
-typedef struct {
-    TIM_HandleTypeDef *htim;   // 定时器句柄
-    uint32_t Channel;          // PWM通道
-    float current_angle;       // 当前角度
-    float target_angle;        // 目标角度
-    float step_speed;          // 步进速度（度/更新周期）
-    uint8_t is_moving;         // 运动状态标志
-}ServoControl;
+#define UP_FLAT         90.0   //上舵机水平 
+#define UP_SKID         30.0   //上舵机正抛
+#define UP_ANTI_SKID    170.0  //上舵机反抛
+
+#define DOWM_FLAT       70.0   //下舵机水平
+#define DOWM_LEFT       110.0  //下舵机左侧——可回收垃圾侧
+#define DOWM_RIGHT      20.0   //下舵机右侧
+
+void servo_up_set_angel(float angle);
+void servo_dowm_set_angel(float angle);
+
 
 void servo_init(void);
 void set_servo_angle(TIM_HandleTypeDef *htim, uint32_t Channel, float angle);
-void update_servo_motion(ServoControl *servo);
-void set_servo_target_angle(ServoControl *servo, float target_angle, uint8_t use_smooth, float speed_deg_per_sec);
-
+void servo_return(void);
+void servo_else_waste(void);
+void servo_recyclable(void);
+void servo_hazardous(void);
+void servo_kitchen(void);
 
 #endif /* __SERVO_CTRL_H_ */
